@@ -2,9 +2,11 @@
 
 ### To Do List
 
-- [ ] Feature Detection
-- [ ] Feature Matching
+- [x] Feature Detection - SIFT
+- [x] Feature Matching - SIFT
+- [ ] cv2.Keypoint → Homogeneous Keypoints
 - [ ] Geometric Constraints - RANSAC
 - [ ] Triangulation
 - [ ] Bundle Adjustment
+- [ ] Visualization
 

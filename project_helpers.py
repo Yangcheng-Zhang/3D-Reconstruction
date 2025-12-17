@@ -105,8 +105,16 @@ def correct_H_sign(H, x1, x2):
     return H
 
 def homography_to_RT(H):
-    
+    """
+    Decompose a homography matrix into two possible camera matrix (R | t).
+
+    :param H: Homography matrix (should be sign-corrected) - ndarray (3,3)
+    :return RT: Two possible camera matrices - ndarray (2,3,4)
+    """
     def unitize(a,b):
+        """
+        Normalize a 2D vector (a,b) to unit length (ra,rb).
+        """
         denom = 1.0 / (a**2+b**2)**(0.5)
         ra = a * denom
         rb = b * denom
@@ -131,7 +139,7 @@ def homography_to_RT(H):
   
     if n1[2] < 0:
         t1 = -t1
-        n1 = -n1
+        n1 = -n1    # I mean, we do not use n anymore later.
 
     if n2[2] < 0:
         t2 = -t2
