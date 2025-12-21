@@ -14,18 +14,5 @@ print(f"Dataset {dataset} is selected.")
 # Use BFMathcher instead of FlannBasedMatcher - BF gives better results.
 imgs, keypoints, matches = compute_feature_matches(dataset)
 
-# # Mathing Visualization
-# for (i,j), m in matches.items():
-#
-#     img_vis = cv2.drawMatches(
-#         imgs[i], keypoints[i],
-#         imgs[j], keypoints[j],
-#         m[:100], None,
-#         flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS
-#     )
-#
-#     plt.figure(figsize=(12,6))
-#     plt.title(f"Dataset {dataset} - Pair ({i},{j})")
-#     plt.imshow(img_vis, cmap='gray')
-#     plt.axis("off")
-#     plt.show()
+# # Check 2D pts extraction
+# pprint.pprint(matches)

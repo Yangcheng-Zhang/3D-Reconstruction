@@ -10,11 +10,11 @@ def compute_feature_matches(dataset):
     # Load dataset info
     K, img_names, init_pair, _ = get_dataset_info(dataset)
 
-    # Read RGB images
+    # Read images and transfer to gray images
     imgs = [cv2.imread(name, cv2.IMREAD_GRAYSCALE) for name in img_names]
 
     # Feature detector for each image
-    # Initiate SIFT detector
+    # Initiate SIFT detector (same para. as in the Assignment 4)
     sift = cv2.SIFT_create(contrastThreshold=0.02, edgeThreshold=10, nOctaveLayers=3)
 
     keypoints   = []
@@ -48,12 +48,35 @@ def compute_feature_matches(dataset):
         print(f"There are {len(knn)} matches be found in total.")
 
         good = []
+        pts1_px = []
+        pts2_px = []
+
         # Apply ratio test, ratio_threshold=0.75
         for m, n in knn:
             if m.distance < 0.75 * n.distance:
                 good.append(m)
+                pts1_px.append(keypoints[i][m.queryIdx].pt)
+                pts2_px.append(keypoints[j][m.trainIdx].pt)
 
-        matches[(i, j)] = good
+        # Transfer to numpy array - (2,N)
+        pts1_px = np.array(pts1_px).T
+        pts2_px = np.array(pts2_px).T
+
+        # Homogeneous coord.
+        pts1_homo = np.vstack([pts1_px, np.ones(pts1_px.shape[1])])
+        pts2_homo = np.vstack([pts2_px, np.ones(pts2_px.shape[1])])
+
+        # Normalize
+        pts1_norm = np.linalg.inv(K) @ pts1_homo
+        pts2_norm = np.linalg.inv(K) @ pts2_homo
+
+        matches [(i, j)] = {
+            'pts1_norm': pts1_norm,
+            'pts2_norm': pts2_norm
+        }
+
         print(f"After ratio-test, {len(good)} good matches are left.")
+
+
 
     return imgs, keypoints, matches
